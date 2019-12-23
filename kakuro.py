@@ -1,12 +1,12 @@
-from csp import *
-from search import *
-from puzzles import *
-from utils import *
-
 import os
 import re
 import sys
 import time
+
+from csp import *
+from search import *
+from puzzles import *
+from utils import *
 
 class Kakuro(CSP):
     def __init__(self, puzzle):
@@ -95,12 +95,44 @@ class Kakuro(CSP):
                             assigned_neighbors += 1
                 sum_of_neighbors += a + b
                 assigned_neighbors += 2
-                if ((len(sum[1]) > assigned_neighbors) and (sum_of_neighbors >= sum[0])):
+                if (len(sum[1]) > assigned_neighbors) and (sum_of_neighbors >= sum[0]):
                     return False
-                if ((len(sum[1]) == assigned_neighbors) and (sum_of_neighbors != sum[0])):
+                if (len(sum[1]) == assigned_neighbors) and (sum_of_neighbors != sum[0]):
                     return False
 
+        # Check if A's constraints are being satisfied
+        for sum in self.sums:
+            if (A in sum[1]) and (B not in sum[1]):
+                sum_of_neighbors = 0
+                assigned_neighbors = 0
+                for variable in sum[1]:
+                    if variable in assignment:
+                        if variable != A:
+                            sum_of_neighbors += assignment[variable]
+                            assigned_neighbors += 1
+                sum_of_neighbors += a
+                assigned_neighbors += 1
+                if (len(sum[1]) > assigned_neighbors) and (sum_of_neighbors >= sum[0]):
+                    return False
+                if (len(sum[1]) == assigned_neighbors) and (sum_of_neighbors != sum[0]):
+                    return False
 
+        # Check if B's constraints are being satisfied
+        for sum in self.sums:
+            if (A not in sum[1]) and (B in sum[1]):
+                sum_of_neighbors = 0
+                assigned_neighbors = 0
+                for variable in sum[1]:
+                    if variable in assignment:
+                        if variable != B:
+                            sum_of_neighbors += assignment[variable]
+                            assigned_neighbors += 1
+                sum_of_neighbors += b
+                assigned_neighbors += 1
+                if (len(sum[1]) > assigned_neighbors) and (sum_of_neighbors >= sum[0]):
+                    return False
+                if (len(sum[1]) == assigned_neighbors) and (sum_of_neighbors != sum[0]):
+                    return False
         # Everthing ok, constraints are being satisfied so return True
         return True
 
@@ -156,9 +188,9 @@ class Kakuro(CSP):
 
 
 if __name__ == "__main__":
-    kakuro = Kakuro(intermediate_7x7)
-    kakuro.display_grid(intermediate_7x7)
+    kakuro = Kakuro(test)
+    kakuro.display_grid(test)
     magic = backtracking_search(kakuro, select_unassigned_variable=mrv, inference=forward_checking)
     print("\nSolution:", magic)
     print()
-    kakuro.display_solution(intermediate_7x7, magic)
+    kakuro.display_solution(test, magic)
