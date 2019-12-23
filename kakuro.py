@@ -2,9 +2,9 @@ import os
 import re
 import sys
 import time
+import puzzles
 
 from csp import *
-from puzzles import *
 from search import *
 from utils import *
 
@@ -66,7 +66,6 @@ class Kakuro(CSP):
         return neighbors
 
     def get_constraints(self, A, a, B, b):
-
         # if two neighbors have the same value constraints are not satisfied
         if a == b:
             return False
@@ -218,32 +217,40 @@ class Kakuro(CSP):
 
 
 if __name__ == "__main__":
-    # ----------------------- Easy 5 X 5 puzzle -----------------------
-    print("\n-------- Easy 5 X 5 Kakuro puzzle --------")
-    kakuro = Kakuro(easy_5x5)
-    kakuro.display_grid(kakuro.puzzle)
-    # BT algorithm
-    print("\n------ Solution using BT algorithm ------")
-    solution, time_elapsed = kakuro.BT()
-    kakuro.display_solution(kakuro.puzzle, solution)
-    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
-    # BT + MRV algorithm
-    print("\n-- Solution using BT and MRV algorithm --")
-    solution, time_elapsed = kakuro.BT_MRV()
-    kakuro.display_solution(kakuro.puzzle, solution)
-    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
-    # FC algorithm
-    print("\n------ Solution using FC algorithm ------")
-    solution, time_elapsed = kakuro.FC()
-    kakuro.display_solution(kakuro.puzzle, solution)
-    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
-    # FC + MRV algorithm
-    print("\n-- Solution using FC and MRV algorithm --")
-    solution, time_elapsed = kakuro.FC_MRV()
-    kakuro.display_solution(kakuro.puzzle, solution)
-    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
-    # MAC algorithm
-    print("\n------ Solution using MAC algorithm ------")
-    solution, time_elapsed = kakuro.MAC()
-    kakuro.display_solution(kakuro.puzzle, solution)
-    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+    # Get all puzzles from puzzle.py
+    kakuro_puzzles = []
+    for item in vars(puzzles).keys():
+        if not item.startswith("__"):
+            kakuro_puzzles.append((item,vars(puzzles)[item]))
+
+    for puzzle_name, puzzle in kakuro_puzzles:
+        print("\n----------------------------- {} Kakuro puzzle -----------------------------".format(puzzle_name))
+        kakuro = Kakuro(puzzle)
+        kakuro.display_grid(kakuro.puzzle)
+        # BT algorithm
+        print("\n> Solution using BT algorithm")
+        solution, time_elapsed = kakuro.BT()
+        kakuro.display_solution(kakuro.puzzle, solution)
+        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        # BT + MRV algorithm
+        print("\n> Solution using BT and MRV algorithm")
+        solution, time_elapsed = kakuro.BT_MRV()
+        kakuro.display_solution(kakuro.puzzle, solution)
+        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        # FC algorithm
+        print("\n> Solution using FC algorithm")
+        solution, time_elapsed = kakuro.FC()
+        kakuro.display_solution(kakuro.puzzle, solution)
+        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        # FC + MRV algorithm
+        print("\n> Solution using FC and MRV algorithm")
+        solution, time_elapsed = kakuro.FC_MRV()
+        kakuro.display_solution(kakuro.puzzle, solution)
+        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        # MAC algorithm
+        print("\n> Solution using MAC algorithm")
+        solution, time_elapsed = kakuro.MAC()
+        kakuro.display_solution(kakuro.puzzle, solution)
+        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        # print an empty line for better output
+        print()
