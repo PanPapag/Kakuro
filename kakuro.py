@@ -4,8 +4,8 @@ import sys
 import time
 
 from csp import *
-from search import *
 from puzzles import *
+from search import *
 from utils import *
 
 class Kakuro(CSP):
@@ -159,6 +159,36 @@ class Kakuro(CSP):
                         sums.append((cell[1], x))
         return sums
 
+    def BT(self):
+        start = time.time()
+        result = backtracking_search(self)
+        end = time.time()
+        return (result, end - start)
+
+    def BT_MRV(self):
+        start = time.time()
+        result = backtracking_search(self, select_unassigned_variable=mrv)
+        end = time.time()
+        return (result, end - start)
+
+    def FC(self):
+        start = time.time()
+        result = (backtracking_search(self, inference=forward_checking))
+        end = time.time()
+        return (result, end - start)
+
+    def FC_MRV(self):
+        start = time.time()
+        result = (backtracking_search(self, select_unassigned_variable=mrv, inference=forward_checking))
+        end = time.time()
+        return (result, end - start)
+
+    def MAC(self):
+        start = time.time()
+        result = (backtracking_search(self, select_unassigned_variable=mrv, inference=mac))
+        end = time.time()
+        return (result, end - start)
+
     def display_grid(self, grid):
         for i in range(self.rows_size):
             for j in range(self.cols_size):
@@ -188,9 +218,32 @@ class Kakuro(CSP):
 
 
 if __name__ == "__main__":
-    kakuro = Kakuro(test)
-    kakuro.display_grid(test)
-    magic = backtracking_search(kakuro, select_unassigned_variable=mrv, inference=forward_checking)
-    print("\nSolution:", magic)
-    print()
-    kakuro.display_solution(test, magic)
+    # ----------------------- Easy 5 X 5 puzzle -----------------------
+    print("\n-------- Easy 5 X 5 Kakuro puzzle --------")
+    kakuro = Kakuro(easy_5x5)
+    kakuro.display_grid(kakuro.puzzle)
+    # BT algorithm
+    print("\n------ Solution using BT algorithm ------")
+    solution, time_elapsed = kakuro.BT()
+    kakuro.display_solution(kakuro.puzzle, solution)
+    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+    # BT + MRV algorithm
+    print("\n-- Solution using BT and MRV algorithm --")
+    solution, time_elapsed = kakuro.BT_MRV()
+    kakuro.display_solution(kakuro.puzzle, solution)
+    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+    # FC algorithm
+    print("\n------ Solution using FC algorithm ------")
+    solution, time_elapsed = kakuro.FC()
+    kakuro.display_solution(kakuro.puzzle, solution)
+    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+    # FC + MRV algorithm
+    print("\n-- Solution using FC and MRV algorithm --")
+    solution, time_elapsed = kakuro.FC_MRV()
+    kakuro.display_solution(kakuro.puzzle, solution)
+    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+    # MAC algorithm
+    print("\n------ Solution using MAC algorithm ------")
+    solution, time_elapsed = kakuro.MAC()
+    kakuro.display_solution(kakuro.puzzle, solution)
+    print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
