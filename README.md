@@ -17,7 +17,7 @@ python3 kakuro.py
 ```
 
 ## Author 
-Pantelis Papageorgiou 
+Pantelis Papageorgiou sdi1700115@di.uoa.gr
 
 ## License
-This program is licensed under MIT License
+This program is licensed under the MIT License
