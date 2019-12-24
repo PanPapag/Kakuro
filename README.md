@@ -16,4 +16,7 @@ Cd into the repo's directory and type in a command line:
 python3 kakuro.py
 ```
 
+## Author 
+Pantelis Papageorgiou [https://github.com/PanPapag/]
+
 
