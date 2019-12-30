@@ -202,17 +202,22 @@ class Kakuro(CSP):
                     print(grid[i][j].ljust(4), end='\t')
             print()
 
-    def display_solution(self, grid, solution):
-        for variable in self.variables:
-            # Get row and col of current variable
-            row = int(re.search('_(.*)_', variable).group(1))
-            col = int(variable.rsplit('_', 1)[-1])
-            # Get value
-            value = solution[variable]
-            # Assign value of the variable to the grid
-            grid[row][col] = str(value)
-        # display assigned grid
-        self.display_grid(grid)
+    def display_solution(self, grid, solution, time_elapsed, assigns):
+        if solution != None:
+            for variable in self.variables:
+                # Get row and col of current variable
+                row = int(re.search('_(.*)_', variable).group(1))
+                col = int(variable.rsplit('_', 1)[-1])
+                # Get value
+                value = solution[variable]
+                # Assign value of the variable to the grid
+                grid[row][col] = str(value)
+            # display assigned grid
+            self.display_grid(grid)
+            print("Number of assigns: {}".format(assigns))
+            print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        else:
+            print("No solution found!")
 
 
 
@@ -229,28 +234,18 @@ if __name__ == "__main__":
         kakuro.display_grid(kakuro.puzzle)
         # BT algorithm
         print("\n> Solution using BT algorithm")
-        solution, time_elapsed = kakuro.BT()
-        kakuro.display_solution(kakuro.puzzle, solution)
-        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        kakuro.display_solution(kakuro.puzzle, *kakuro.BT(), kakuro.nassigns)
         # BT + MRV algorithm
         print("\n> Solution using BT and MRV algorithm")
-        solution, time_elapsed = kakuro.BT_MRV()
-        kakuro.display_solution(kakuro.puzzle, solution)
-        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        kakuro.display_solution(kakuro.puzzle, *kakuro.BT_MRV(), kakuro.nassigns)
         # FC algorithm
         print("\n> Solution using FC algorithm")
-        solution, time_elapsed = kakuro.FC()
-        kakuro.display_solution(kakuro.puzzle, solution)
-        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        kakuro.display_solution(kakuro.puzzle, *kakuro.FC(), kakuro.nassigns)
         # FC + MRV algorithm
         print("\n> Solution using FC and MRV algorithm")
-        solution, time_elapsed = kakuro.FC_MRV()
-        kakuro.display_solution(kakuro.puzzle, solution)
-        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        kakuro.display_solution(kakuro.puzzle, *kakuro.FC_MRV(), kakuro.nassigns)
         # MAC algorithm
         print("\n> Solution using MAC algorithm")
-        solution, time_elapsed = kakuro.MAC()
-        kakuro.display_solution(kakuro.puzzle, solution)
-        print("Total time elapsed: {:.4f} seconds".format(time_elapsed))
+        kakuro.display_solution(kakuro.puzzle, *kakuro.MAC(), kakuro.nassigns)
         # print an empty line for better output
         print()
